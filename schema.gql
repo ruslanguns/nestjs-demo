@@ -3,34 +3,36 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type Author {
-  id: Int!
-  firstName: String
-  lastName: String
-  posts: [Post!]!
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type Mutation {
+  addRecipe(newRecipeData: NewRecipeInput!): Recipe!
+  removeRecipe(id: String!): Boolean!
 }
 
-type Hello {
-  greetings: String!
-}
-
-"""Mongo object id scalar type"""
-scalar ObjectId
-
-type Post {
-  id: Int!
+input NewRecipeInput {
   title: String!
-  votes: Int
+  description: String
+  ingredients: [String!]!
 }
 
 type Query {
-  getHello: Hello!
-  author(id: Int!): Author!
+  recip: String!
+  recipe(id: String!): Recipe!
+  recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
 }
 
-type User {
-  id: ObjectId!
-  firstName: String!
-  lastName: String!
-  isOld: Boolean!
+type Recipe {
+  id: ID!
+  title: String!
+  description: String
+  creationDate: DateTime!
+  ingredients: [String!]!
+}
+
+type Subscription {
+  recipeAdded: Recipe!
 }

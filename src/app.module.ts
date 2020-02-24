@@ -1,25 +1,30 @@
 import { Module, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { AppController } from './app.controller';
+import { GraphQLModule } from '@nestjs/graphql';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { BlogModule } from './blog/blog.module';
 import { ConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { RecipeModule } from './recipe/recipe.module';
 import { UserModule } from './user/user.module';
-import { GraphQLModule } from '@nestjs/graphql';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
+    RecipeModule,
     AuthModule,
-    ConfigModule.register({ folder: './env' }),
     DatabaseModule,
     UserModule,
+    BlogModule,
+    ConfigModule.register({ folder: './env' }),
     GraphQLModule.forRoot({
-      autoSchemaFile: true,
-      debug:true,
-      playground:true,
-    })
+      autoSchemaFile: 'schema.gql',
+      installSubscriptionHandlers: true,
+      debug: true,
+      playground: true,
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -31,10 +36,6 @@ import { GraphQLModule } from '@nestjs/graphql';
   ],
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {
-  /*   configure(consumer: MiddlewareConsumer) {
-    consumer.apply().forRoutes();
-  } */
-
   onModuleInit() {
     console.log(`[AppModule] has been initialized...`);
   }

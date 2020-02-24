@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Min } from 'class-validator';
-import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql';
+import { UserRole } from 'src/lib/constants';
 //
 //import { Post } from 'src/post/entity/post.entity';
-import { UserRole } from 'src/types';
 import { User } from 'src/user/entity/user.entity';
+import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql';
 
 @ObjectType()
 export class Author extends User {
