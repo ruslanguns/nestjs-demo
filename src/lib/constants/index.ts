@@ -2,8 +2,7 @@
 export enum UserRole {
   ADMIN = 'ADMIN',
   EDITOR = 'EDITOR',
-  LEFT = 'LEFT',
-  RIGHT = 'RIGHT',
+  MODERATOR= 'MODERATOR'
 }
 
 export enum UserPrivilege {
@@ -11,3 +10,5 @@ export enum UserPrivilege {
   PARTIAL = '2',
   NEVER = '3',
 }
+
+export const CONFIG_OPTIONS = 'CONFIG_OPTIONS';

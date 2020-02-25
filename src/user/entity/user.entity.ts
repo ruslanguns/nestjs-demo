@@ -1,45 +1,92 @@
-import { Field, ID, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsString, IsBoolean, IsDate } from 'class-validator';
+import { IsString } from 'class-validator';
+import { UserBase } from 'src/lib/entity/userBase.entity';
+import { ArgsType, Field, ID, ObjectType, InputType } from 'type-graphql';
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserRole } from 'src/lib/constants';
+
+
+export interface ILoginUser{
+  email:string;
+  password:string;
+}
 
 @ObjectType({ description: 'The user model' })
 @Entity()
-export class User extends BaseEntity {
+export class User extends UserBase {
+  //used to create simple Field Resolver
+  /* @Field({ description: 'Returns full name of user', nullable: true })
+  @IsString()
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  } */
+}
+
+@ArgsType()
+export class GetUserArgs {
   @Field(type => ID)
+  id: string;
+}
+
+
+@InputType({ description: 'New user data' })
+export class UserRegInput implements Partial<UserBase> {
   @PrimaryGeneratedColumn('uuid')
-  readonly id: number;
+  readonly id: string;
 
   @Field()
-  @Column()
   @IsString()
   firstName: string;
 
   @Field()
-  @Column()
   @IsString()
   lastName: string;
-
-  //used to create simple Field Resolver
-  @Field({ description: 'Returns full name of user' })
+  
+  @Field()
   @IsString()
-  get fullName(): string {
-    return `${this.firstName} ${this.lastName}`;
-  }
+  email: string;
+  
+  @Field()
+  @IsString()
+  password: string;
+}
+
+
+@InputType({ description: 'New user data' })
+export class UserLoginInput implements Partial<UserBase> {
+  @PrimaryGeneratedColumn('uuid')
+  readonly id: string;
+  
+  @Field()
+  @IsString()
+  email: string;
 
   @Field()
   @IsString()
-  @Column('text', { unique: true })
+  password: string;
+}
+
+@InputType({ description: 'Add new user with role' })
+export class AddUserInput extends UserBase {
+  @PrimaryGeneratedColumn('uuid')
+  readonly id: string;
+  
+  @Field()
+  @IsString()
+  firstName: string;
+  
+  @Field()
+  @IsString()
+  lastName: string;
+  
+  @Field()
+  @IsString()
   email: string;
 
-  @Column()
+  @Field()
   @IsString()
   password: string;
 
-  @Column('bool', { default: false })
-  @IsBoolean()
-  confirmed: boolean;
-
-  @Column('date', { default: Date.now() })
-  @IsDate()
-  createdDate: Date;
+  @Field()
+  @IsString()
+  role: UserRole;
 }

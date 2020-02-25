@@ -3,12 +3,33 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""Add new user with role"""
+input AddUserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  role: String!
+}
+
+type Author {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: UserRole
+  posts: [Post!]!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
 scalar DateTime
 
 type Mutation {
+  addUser(addUserInput: AddUserInput!): User!
+  signup(regInput: UserRegInput!): User!
+  login(loginInput: UserLoginInput!): User!
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
 }
@@ -19,7 +40,14 @@ input NewRecipeInput {
   ingredients: [String!]!
 }
 
+type Post {
+  id: ID!
+}
+
 type Query {
+  me: User
+  users: [User!]!
+  user(id: ID!): User!
   recip: String!
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
@@ -35,4 +63,43 @@ type Recipe {
 
 type Subscription {
   recipeAdded: Recipe!
+}
+
+"""The user model"""
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: UserRole
+}
+
+"""The user model"""
+type UserBase {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: UserRole
+}
+
+"""New user data"""
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+"""New user data"""
+input UserRegInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+}
+
+"""The definition of an enumerated User Role"""
+enum UserRole {
+  ADMIN
+  EDITOR
+  MODERATOR
 }

@@ -2,7 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
-import { CONFIG_OPTIONS } from 'src/constants';
+import { CONFIG_OPTIONS } from 'src/lib/constants';
+
 
 @Injectable()
 export class ConfigService {

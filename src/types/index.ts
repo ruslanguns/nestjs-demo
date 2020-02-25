@@ -1,15 +1,6 @@
 import { CustomScalar, Scalar } from '@nestjs/graphql';
 import { GraphQLScalarType, Kind, ValueNode } from 'graphql';
 import { ObjectId } from 'mongodb';
-import { registerEnumType } from 'type-graphql';
-import { UserRole } from 'src/lib/constants';
-
-/* To tell TypeGraphQL about our enum, we would ideally mark the enums with the @GraphQLEnumType() decorator. However, TypeScript decorators only work with classes, so we need to make TypeGraphQL aware of the enums manually by calling the registerEnumType function and providing the enum name for GraphQL: */
-
-registerEnumType(UserRole, {
-  name: 'User Role',
-  description: 'An enumerated User Role',
-});
 
 
 @Scalar('Date', type => Date)
@@ -32,8 +23,6 @@ export class DateScalar implements CustomScalar<number, Date> {
   }
 }
 
-
-
 /* to create custom scalars; instantiate the GraphQLScalarType  */
 
 export const ObjectIdScalar = new GraphQLScalarType({
@@ -52,4 +41,5 @@ export const ObjectIdScalar = new GraphQLScalarType({
     return null;
   },
 });
+
 

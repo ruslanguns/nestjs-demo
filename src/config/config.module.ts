@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { CONFIG_OPTIONS } from '../constants';
 import { ConfigService } from './config.service';
+import { CONFIG_OPTIONS } from 'src/lib/constants';
 
 // THIS PROVIDER (token) WOULD BE REPLACED BY THE useClass SERVICE
 /* const configService = {
