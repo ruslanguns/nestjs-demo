@@ -1,4 +1,4 @@
-import { Module, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
+import { Module, OnApplicationShutdown, OnModuleInit, CacheModule, CacheInterceptor } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -19,6 +19,10 @@ import configuration from './config/configuration';
 
 @Module({
   imports: [
+    CacheModule.register({
+      ttl: 500, //500 sec
+      max: 50, // maximum num of items in cache
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
