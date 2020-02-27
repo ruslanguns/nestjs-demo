@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString,IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
 import { UserBase } from 'src/lib/entity/userBase.entity';
 import { ArgsType, Field, ID, ObjectType, InputType } from 'type-graphql';
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
@@ -24,9 +24,9 @@ export class User extends UserBase {
 @ArgsType()
 export class GetUserArgs {
   @Field(type => ID)
+  @IsNumberString()
   id: string;
 }
-
 
 @InputType({ description: 'New user data' })
 export class UserRegInput implements Partial<UserBase> {
@@ -40,13 +40,15 @@ export class UserRegInput implements Partial<UserBase> {
   @Field()
   @IsString()
   lastName: string;
-  
+
   @Field()
   @IsString()
+  @IsEmail()
   email: string;
-  
+
   @Field()
   @IsString()
+  @IsNotEmpty()
   password: string;
 }
 
@@ -55,7 +57,7 @@ export class UserRegInput implements Partial<UserBase> {
 export class UserLoginInput implements Partial<UserBase> {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
-  
+
   @Field()
   @IsString()
   email: string;

@@ -3,10 +3,12 @@ import compression from 'compression';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
+import 'reflect-metadata';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './exceptions/filters/http-exception';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { logger } from './middleware/logger.middleware';
+import { ValidationPipe } from './pipe/validation.pipe';
 
 async function bootstrap() {
   dotenv.config({ debug: true });
@@ -18,6 +20,7 @@ async function bootstrap() {
   app.use(compression());
   app.useGlobalFilters(new HttpExceptionFilter()); // Global scoped filter
   app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalPipes(new ValidationPipe());
   app.use(logger);
 
   // Starts listening for shutdown hooks

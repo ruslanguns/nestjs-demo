@@ -1,21 +1,26 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IRequestContext } from 'src/lib';
-import { AddUserInput, GetUserArgs, User, UserLoginInput, UserRegInput } from '../entity/user.entity';
+import {
+  AddUserInput,
+  GetUserArgs,
+  User,
+  UserLoginInput,
+  UserRegInput,
+} from '../entity/user.entity';
 import { UserService } from '../user.service';
 
 @Resolver(of => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-   @Query(returns => User, {nullable:true})
+  @Query(returns => User, { nullable: true })
   async me(@Context() ctx: IRequestContext): Promise<User | undefined> {
     try {
-        const userId = ctx.req['userId']
-        if (!userId) {
-			return undefined;
-		}
-      return await this.userService.findOne(userId)
-      
+      const userId = ctx.req['userId'];
+      if (!userId) {
+        return undefined;
+      }
+      return await this.userService.findOne(userId);
     } catch (err) {
       throw new Error(err);
     }

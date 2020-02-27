@@ -7,52 +7,38 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BlogModule } from './blog/blog.module';
-import { ConfigModule } from './config/config.module';
+import { CategoryModule } from './category/category.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { ProductModule } from './product/product.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { TypeormConfigService } from './services/typeorm-config/typeorm-config.service';
 import { UserModule } from './user/user.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
     RecipeModule,
     AuthModule,
     DatabaseModule,
     UserModule,
     BlogModule,
-    ConfigModule.register({ folder: './env' }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       installSubscriptionHandlers: true,
       debug: true,
       playground: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'toor',
-      database: 'db_test_101',
-      synchronize: true,
-      logging: ['error'],
-      maxQueryExecutionTime: 3600,
-      entityPrefix: 'inv_',
-      cache: {
-        duration: 6000,
-      },
-      //entities: ['src/**.entity.ts'],
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      autoLoadEntities:true,
-      migrations: ['src/database/migration/**/*.entity.ts'],
-      subscribers: ['src/database/subscriber/**/*.entity.ts'],
-      cli: {
-        entitiesDir: 'src/database/entity',
-        migrationsDir: 'src/database/migration',
-        subscribersDir: 'src/database/subscriber',
-      },
+    TypeOrmModule.forRootAsync({
+      useClass: TypeormConfigService,
     }),
+    CategoryModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [
@@ -68,7 +54,11 @@ export class AppModule implements OnModuleInit, OnApplicationShutdown {
   constructor(private readonly cnx: Connection) {
     cnx
       .connect()
-      .then()
+      .then(cn => {
+        if (cn) {
+          return;
+        }
+      })
       .catch(err => console.log('[DB Connection Error]: ', err));
   }
   onModuleInit() {

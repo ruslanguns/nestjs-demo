@@ -21,6 +21,20 @@ type Author {
   posts: [Post!]!
 }
 
+type Category {
+  id: ID!
+  name: String!
+}
+
+input CategoryInput {
+  name: String!
+}
+
+"""The Date model"""
+type DateBase {
+  id: ID!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -30,6 +44,8 @@ type Mutation {
   addUser(addUserInput: AddUserInput!): User!
   signup(regInput: UserRegInput!): User!
   login(loginInput: UserLoginInput!): User!
+  addCategory(categoryInput: CategoryInput!): Category
+  updateCategory(categoryInput: CategoryInput!): Category
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
 }
@@ -44,10 +60,33 @@ type Post {
   id: ID!
 }
 
+"""Product data"""
+type Product {
+  id: ID!
+  name: String!
+  description: String!
+  image: String!
+  barCode: String!
+  costPrice: Float!
+  sellPrice: Float!
+  inStock: Float!
+  outStock: Float!
+  sellsMeasurement: String!
+  visibleOnShelve: String!
+}
+
+"""Product input data"""
+input ProductInput {
+  email: String!
+  password: String!
+}
+
 type Query {
   me: User
   users: [User!]!
   user(id: ID!): User!
+  categories: [Category!]
+  category(id: ID!, name: String!): Category
   recip: String!
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
