@@ -76,9 +76,11 @@ export class UserService {
     }
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(username?: string, id?: string): Promise<User> {
     try {
-      return await this.userRepository.findOne({ where: { id } });
+      return await this.userRepository.findOne({
+        where: [{ id }, { username }],
+      });
     } catch (err) {
       throw new Error(err);
     }

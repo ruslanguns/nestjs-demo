@@ -11,4 +11,5 @@ export enum UserPrivilege {
   NEVER = '3',
 }
 
+export const SALT_ROUND = process.env.SALT_ROUND ;
 export const CONFIG_OPTIONS = 'CONFIG_OPTIONS';

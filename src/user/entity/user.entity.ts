@@ -1,4 +1,4 @@
-import { IsString,IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
+import { IsString,IsEmail, IsNotEmpty, IsNumberString, Length, IsBoolean } from 'class-validator';
 import { UserBase } from 'src/lib/entity/userBase.entity';
 import { ArgsType, Field, ID, ObjectType, InputType } from 'type-graphql';
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
@@ -24,7 +24,7 @@ export class User extends UserBase {
 @ArgsType()
 export class GetUserArgs {
   @Field(type => ID)
-  @IsNumberString()
+  //@IsNumberString()
   id: string;
 }
 
@@ -35,10 +35,12 @@ export class UserRegInput implements Partial<UserBase> {
 
   @Field()
   @IsString()
+  @Length(5, 25)
   firstName: string;
 
   @Field()
   @IsString()
+  @Length(5, 25)
   lastName: string;
 
   @Field()
@@ -47,6 +49,7 @@ export class UserRegInput implements Partial<UserBase> {
   email: string;
 
   @Field()
+  @Length(5, 25)
   @IsString()
   @IsNotEmpty()
   password: string;
@@ -60,9 +63,11 @@ export class UserLoginInput implements Partial<UserBase> {
 
   @Field()
   @IsString()
+  @IsEmail()
   email: string;
 
   @Field()
+  @Length(5, 25)
   @IsString()
   password: string;
 }
@@ -71,24 +76,32 @@ export class UserLoginInput implements Partial<UserBase> {
 export class AddUserInput extends UserBase {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
-  
+
   @Field()
   @IsString()
+  @Length(5, 25)
   firstName: string;
-  
+
   @Field()
   @IsString()
+  @Length(5, 25)
   lastName: string;
-  
+
   @Field()
   @IsString()
+  @IsEmail()
   email: string;
 
   @Field()
   @IsString()
+  @Length(5, 25)
   password: string;
 
   @Field()
   @IsString()
   role: UserRole;
+
+ // @Column('bool', { default: false, nullable: true })
+  @IsBoolean()
+  confirmedSignup?: boolean;
 }

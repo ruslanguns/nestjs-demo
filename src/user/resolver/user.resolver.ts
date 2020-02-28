@@ -54,7 +54,7 @@ export class UserResolver {
       const user = await this.userService.addUser(addUserInput);
       return user;
     } catch (err) {
-      throw new Error(err);
+        throw new Error(err);
     }
   }
 

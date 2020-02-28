@@ -56,14 +56,7 @@ import configuration from './config/configuration';
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {
   constructor(private readonly cnx: Connection) {
-    cnx
-      .connect()
-      .then(cn => {
-        if (cn) {
-          return;
-        }
-      })
-      .catch(err => console.log('[DB Connection Error]: ', err));
+   
   }
   onModuleInit() {
     console.log(`[AppModule] has been initialized...`);

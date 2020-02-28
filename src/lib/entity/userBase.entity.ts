@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsString, IsEmail, Length, IsNotEmpty } from 'class-validator';
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import {
   BaseEntity,
@@ -20,20 +20,24 @@ export abstract class UserBase {
   @Field()
   @Column()
   @IsString()
+   @Length(2, 25)
   firstName: string;
 
   @Field()
   @Column()
   @IsString()
+   @Length(2, 25)
   lastName: string;
 
   @Field()
-  @IsString()
+  @IsEmail()
   @Column('text', { unique: true })
   email: string;
 
   @Column()
+  @Length(5, 25)
   @IsString()
+  @IsNotEmpty()
   password: string;
 
   @Field(type => UserRole, { nullable: true }) //the Enum most be issued as type foremost
@@ -45,11 +49,9 @@ export abstract class UserBase {
   confirmedSignup?: boolean;
 
   @CreateDateColumn({ type: 'date', nullable:true })
-  @IsDate()
-  createdDate?: Date;
+  createdDate?:  Date;
 
   @UpdateDateColumn({ type: 'date', nullable:true })
-  @IsDate()
   updatedDate?: Date;
 }
 

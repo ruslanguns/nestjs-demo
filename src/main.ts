@@ -20,7 +20,7 @@ async function bootstrap() {
   app.use(compression());
   app.useGlobalFilters(new HttpExceptionFilter()); // Global scoped filter
   app.useGlobalInterceptors(new LoggingInterceptor());
-  app.useGlobalPipes(new ValidationPipe());
+ // app.useGlobalPipes(new ValidationPipe());
   app.use(logger);
 
   // Starts listening for shutdown hooks
