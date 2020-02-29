@@ -40,10 +40,15 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
+"""New user data"""
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
   addUser(addUserInput: AddUserInput!): User!
-  signup(regInput: UserRegInput!): User!
-  login(loginInput: UserLoginInput!): User!
+  signup(signupInput: SignupInput!): User!
   addCategory(categoryInput: CategoryInput!): Category
   updateCategory(categoryInput: CategoryInput!): Category
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
@@ -100,6 +105,14 @@ type Recipe {
   ingredients: [String!]!
 }
 
+"""New user data"""
+input SignupInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+}
+
 type Subscription {
   recipeAdded: Recipe!
 }
@@ -120,20 +133,6 @@ type UserBase {
   lastName: String!
   email: String!
   role: UserRole
-}
-
-"""New user data"""
-input UserLoginInput {
-  email: String!
-  password: String!
-}
-
-"""New user data"""
-input UserRegInput {
-  firstName: String!
-  lastName: String!
-  email: String!
-  password: String!
 }
 
 """The definition of an enumerated User Role"""

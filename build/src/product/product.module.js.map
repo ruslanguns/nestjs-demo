@@ -1,1 +1,0 @@
-{"version":3,"file":"product.module.js","sourceRoot":"","sources":["../../../src/product/product.module.ts"],"names":[],"mappings":";;;;;;;;AAAA,yCAAwC;AACxC,gEAA8D;AAC9D,qDAAmD;AACnD,2FAA8D;AAM9D;IAAA;IAA4B,CAAC;IAAhB,aAAa;QAJzB,eAAM,CAAC;YACN,OAAO,EAAE,CAAC,gCAAc,CAAC;YACzB,SAAS,EAAE,CAAC,kCAAe,EAAE,gCAAc,CAAC;SAC7C,CAAC;OACW,aAAa,CAAG;IAAD,oBAAC;CAAA,AAA7B,IAA6B;AAAhB,sCAAa"}

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { comparePassword, hashPassword } from 'src/lib';
 import { Connection, Repository } from 'typeorm';
 import { ILoginUser, User } from './entity/user.entity';
 
@@ -18,19 +19,21 @@ export class UserService {
     }
   }
 
-  async signup(userArgs: User): Promise<User | null> {
+  async signup(args: User): Promise<User | null> {
     try {
       let res: any;
 
       const userExists = await this.userRepository.findOne({
-        where: { email: userArgs.email },
+        where: { email: args.email },
       });
 
       if (userExists) {
         console.log('[userExists:]:', userExists);
         res = { id: null, data: 'User exists' };
       } else {
-        res = await this.userRepository.save(userArgs);
+        // hash pwd
+        args.password = await hashPassword(args.password)
+        res = await this.userRepository.save(args);
       }
       return res;
     } catch (err) {
@@ -38,10 +41,22 @@ export class UserService {
     }
   }
 
-  async login(user: ILoginUser) {
+  async authenticate(args: ILoginUser): Promise<any> {
     try {
-      console.log('[userService:]', user);
-      return await this.userRepository.save(user);
+  
+      const user = await this.userRepository.findOne({
+        where: [{ email: args.email }, {username: args.username}],
+      });
+
+      const confirmPwd: boolean = await comparePassword(
+        args.password,
+        user.password,
+        );
+
+      if (confirmPwd) {
+        const {password, ...res} = user
+        return res;
+      }
     } catch (err) {
       throw new Error(err);
     }

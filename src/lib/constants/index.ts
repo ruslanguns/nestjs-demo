@@ -13,3 +13,4 @@ export enum UserPrivilege {
 
 export const SALT_ROUND = process.env.SALT_ROUND ;
 export const CONFIG_OPTIONS = 'CONFIG_OPTIONS';
+export const JWT_CONSTANT = {secret: process.env.JWT_CONSTANT}

@@ -1,13 +1,19 @@
-import { IsString,IsEmail, IsNotEmpty, IsNumberString, Length, IsBoolean } from 'class-validator';
-import { UserBase } from 'src/lib/entity/userBase.entity';
-import { ArgsType, Field, ID, ObjectType, InputType } from 'type-graphql';
-import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Length,
+} from 'class-validator';
 import { UserRole } from 'src/lib/constants';
+import { UserBase } from 'src/lib/entity/userBase.entity';
+import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql';
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-
-export interface ILoginUser{
-  email:string;
-  password:string;
+export interface ILoginUser {
+  email?: string;
+  username?: string;
+  password: string;
 }
 
 @ObjectType({ description: 'The user model' })
@@ -29,7 +35,7 @@ export class GetUserArgs {
 }
 
 @InputType({ description: 'New user data' })
-export class UserRegInput implements Partial<UserBase> {
+export class SignupInput implements Partial<UserBase> {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
@@ -55,9 +61,8 @@ export class UserRegInput implements Partial<UserBase> {
   password: string;
 }
 
-
 @InputType({ description: 'New user data' })
-export class UserLoginInput implements Partial<UserBase> {
+export class LoginInput implements Partial<UserBase> {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
@@ -101,7 +106,7 @@ export class AddUserInput extends UserBase {
   @IsString()
   role: UserRole;
 
- // @Column('bool', { default: false, nullable: true })
+  // @Column('bool', { default: false, nullable: true })
   @IsBoolean()
   confirmedSignup?: boolean;
 }

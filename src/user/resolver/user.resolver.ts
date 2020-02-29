@@ -3,9 +3,9 @@ import { IRequestContext } from 'src/lib';
 import {
   AddUserInput,
   GetUserArgs,
+  LoginInput,
+  SignupInput,
   User,
-  UserLoginInput,
-  UserRegInput,
 } from '../entity/user.entity';
 import { UserService } from '../user.service';
 
@@ -54,31 +54,29 @@ export class UserResolver {
       const user = await this.userService.addUser(addUserInput);
       return user;
     } catch (err) {
-        throw new Error(err);
+      throw new Error(err);
     }
   }
 
   @Mutation(() => User)
   async signup(
-    @Args('regInput') userRegInput: UserRegInput,
+    @Args('signupInput') signupInput: SignupInput,
   ): Promise<User | null> {
     try {
-      const user = await this.userService.signup(userRegInput);
+      const user = await this.userService.signup(signupInput);
       return user;
     } catch (err) {
       throw new Error(err);
     }
   }
 
-  @Mutation(returns => User)
-  async login(
-    @Args('loginInput') userLoginInput: UserLoginInput,
-  ): Promise<User> {
+  /* @Mutation(returns => User)
+  async login(@Args('loginInput') loginInput: LoginInput): Promise<User> {
     try {
-      const user = await this.userService.login(userLoginInput);
+      const user = await this.userService.authenticate(loginInput);
       return user;
     } catch (err) {
       throw new Error(err);
     }
-  }
+  } */
 }
