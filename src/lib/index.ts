@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { Validator } from 'class-validator';
 import { Request } from 'express';
 import { SALT_ROUND } from './constants';
 
@@ -23,4 +24,17 @@ export async function comparePassword(
   } catch (err) {
     throw new Error(err);
   }
+}
+
+
+// for non async validation  
+function validate(){
+  return new Validator();
+}
+
+export function isUUID(id:string){
+  return validate().isString(id) && validate().isUUID(id);
+}
+export function isStrAndDefined(str:string){
+  return validate().isString(str) && validate().isDefined(str)
 }

@@ -7,20 +7,31 @@ import 'reflect-metadata';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './exceptions/filters/http-exception';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { LoggerService } from './logger/logger.service';
 import { logger } from './middleware/logger.middleware';
-import { ValidationPipe } from './pipe/validation.pipe';
+
+declare const module: any;
 
 async function bootstrap() {
-  dotenv.config({ debug: true });
-  const app = await NestFactory.create(AppModule);
+  dotenv.config({ debug: false });
+  const app = await NestFactory.create(AppModule, {
+    logger: false,
+  });
 
   //middleware
   app.use(helmet());
-  app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+  app.use(
+    cors({
+      credentials: true,
+      origin: `http://localhost:${process.env.CLIENT_PORT}`,
+    }),
+  );
   app.use(compression());
+  //app.useLogger(app.get(LoggerService));
+  app.useLogger(new LoggerService());
   app.useGlobalFilters(new HttpExceptionFilter()); // Global scoped filter
   app.useGlobalInterceptors(new LoggingInterceptor());
- // app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ValidationPipe());
   app.use(logger);
 
   // Starts listening for shutdown hooks
@@ -30,5 +41,10 @@ async function bootstrap() {
   await app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
   });
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();

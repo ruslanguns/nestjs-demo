@@ -31,13 +31,29 @@ export class CategoryInput extends DateBase {
   name: string;
 }
 
+@InputType()
+export class CategoryUpdateInput extends DateBase {
+  @PrimaryGeneratedColumn('uuid')
+  @Field(type => ID)
+  readonly id: string;
+
+  @Field()
+  @Column()
+  @MaxLength(30)
+  @IsString()
+  name: string;
+}
+
 @ArgsType()
 export class CategoryArgs {
-  @Field(type => ID)
+  @PrimaryGeneratedColumn('uuid')
+  @Field(type => ID, { nullable: true })
   @IsString()
   id?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
+  @MaxLength(30)
   name?: string;
 }
+

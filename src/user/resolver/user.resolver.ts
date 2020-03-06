@@ -70,7 +70,7 @@ export class UserResolver {
     }
   }
 
-  /* @Mutation(returns => User)
+  @Mutation(returns => User)
   async login(@Args('loginInput') loginInput: LoginInput): Promise<User> {
     try {
       const user = await this.userService.authenticate(loginInput);
@@ -78,5 +78,5 @@ export class UserResolver {
     } catch (err) {
       throw new Error(err);
     }
-  } */
+  }
 }

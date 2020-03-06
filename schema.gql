@@ -30,6 +30,11 @@ input CategoryInput {
   name: String!
 }
 
+input CategoryUpdateInput {
+  id: ID!
+  name: String!
+}
+
 """The Date model"""
 type DateBase {
   id: ID!
@@ -49,8 +54,10 @@ input LoginInput {
 type Mutation {
   addUser(addUserInput: AddUserInput!): User!
   signup(signupInput: SignupInput!): User!
+  login(loginInput: LoginInput!): User!
   addCategory(categoryInput: CategoryInput!): Category
-  updateCategory(categoryInput: CategoryInput!): Category
+  updateCategory(categoryInput: CategoryUpdateInput!): Category
+  removeCategory(id: ID, name: String): Category
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
 }
@@ -91,7 +98,7 @@ type Query {
   users: [User!]!
   user(id: ID!): User!
   categories: [Category!]
-  category(id: ID!, name: String!): Category
+  category(id: ID, name: String): Category
   recip: String!
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!

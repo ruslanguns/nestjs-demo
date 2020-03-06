@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LoggerService } from 'src/logger/logger.service';
 import { Repository } from 'typeorm';
+import { isStrAndDefined, isUUID } from '../lib';
 import { Category } from './entity/category.entity';
 
 @Injectable()
@@ -8,24 +10,33 @@ export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-  ) {}
-
-  async findAll(): Promise<Category[]>{
-    try {
-      return await this.categoryRepository.find();
-    } catch (err) {
-      throw new Error(err);
-    }
+    private readonly loggerService: LoggerService,
+  ) {
+    // set scope: context [CategoryService]
+    this.loggerService.setContext('CategoryService');
   }
 
-  async findOne(name?: string, id?: string): Promise<Category | null> {
+  async findAll(): Promise<Category[]> {
     try {
-      return await this.categoryRepository.findOne({
-        where: [{ name }, { id }],
+      this.loggerService.log('[CategoryService] - return all categories');
+      return await this.categoryRepository.find({
         order: { name: 'ASC' },
       });
     } catch (err) {
-      throw new Error(err);
+      this.loggerService.error('[CategoryService] -', `${err}`);
+    }
+  }
+
+  async findOne(id?: string, name?: string): Promise<Category | null> {
+    try {
+      return await this.categoryRepository.findOne({
+        where: [
+          { id: isUUID(id) ? id : null },
+          { name: isStrAndDefined(name) ? name : null, },
+        ],
+      });
+    } catch (err) {
+      this.loggerService.error('[CategoryService] -', `${err}`);
     }
   }
 
@@ -33,7 +44,7 @@ export class CategoryService {
     try {
       return await this.categoryRepository.save(catArg);
     } catch (err) {
-      throw new Error(err);
+      this.loggerService.error('[CategoryService] -', `${err}`);
     }
   }
 
@@ -47,7 +58,7 @@ export class CategoryService {
         return await this.categoryRepository.save(catObj);
       }
     } catch (err) {
-      throw new Error(err);
+      this.loggerService.error('[CategoryService] -', `${err}`);
     }
   }
 
@@ -55,7 +66,7 @@ export class CategoryService {
     try {
       await this.categoryRepository.delete(id);
     } catch (err) {
-      throw new Error(err);
+      this.loggerService.error('[CategoryService] -', `${err}`);
     }
   }
 }

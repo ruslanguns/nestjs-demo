@@ -1,9 +1,4 @@
-import {
-  CacheModule,
-  Module,
-  OnApplicationShutdown,
-  OnModuleInit,
-} from '@nestjs/common';
+import { CacheModule, Module, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -18,10 +13,12 @@ import { CategoryModule } from './category/category.module';
 import configuration from './config/configuration';
 import { DatabaseModule } from './database/database.module';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { LoggerModule } from './logger/logger.module';
 import { ProductModule } from './product/product.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { TypeormConfigService } from './services/typeorm-config/typeorm-config.service';
 import { UserModule } from './user/user.module';
+
 
 @Module({
   imports: [
@@ -50,6 +47,7 @@ import { UserModule } from './user/user.module';
     TypeOrmModule.forRootAsync({
       useClass: TypeormConfigService,
     }),
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [
@@ -60,6 +58,7 @@ import { UserModule } from './user/user.module';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
+ 
   ],
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {

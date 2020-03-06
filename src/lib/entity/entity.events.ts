@@ -1,20 +1,19 @@
-import { AfterLoad, AfterInsert, AfterRemove, Entity } from "typeorm";
-
+import { AfterInsert, AfterLoad, AfterRemove, Entity } from 'typeorm';
 
 @Entity()
-export class EntityEvent {
+export abstract class EntityEvent {
   @AfterLoad()
   entityLoaded() {
-    console.log('[EntityEvents]: entityLoaded event ', new Date());
+    console.log('[EntityEvents]: @AfterLoad', new Date());
   }
 
   @AfterInsert()
   entityInserted() {
-    console.log('[EntityEvents]: entityInserted event ', new Date());
+    console.log('[EntityEvents]: @AfterInsert', new Date());
   }
 
   @AfterRemove()
   entityRemoved() {
-    console.log('[EntityEvents]: entityRemoved event ', new Date());
+    console.log('[EntityEvents]: @AfterRemove', new Date());
   }
 }
