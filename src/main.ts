@@ -11,9 +11,9 @@ import { LoggerService } from './logger/logger.service';
 import { logger } from './middleware/logger.middleware';
 
 declare const module: any;
+dotenv.config();
 
 async function bootstrap() {
-  dotenv.config({ debug: false });
   const app = await NestFactory.create(AppModule, {
     logger: false,
   });
@@ -27,9 +27,8 @@ async function bootstrap() {
     }),
   );
   app.use(compression());
-  //app.useLogger(app.get(LoggerService));
   app.useLogger(new LoggerService());
-  app.useGlobalFilters(new HttpExceptionFilter()); // Global scoped filter
+  app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new LoggingInterceptor());
   // app.useGlobalPipes(new ValidationPipe());
   app.use(logger);

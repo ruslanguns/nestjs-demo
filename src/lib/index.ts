@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { Validator } from 'class-validator';
 import { Request } from 'express';
 import { SALT_ROUND } from './constants';
+import { NotFoundException } from '@nestjs/common';
 
 export interface IRequestContext {
   req: Request;
@@ -26,6 +27,9 @@ export async function comparePassword(
   }
 }
 
+export function notFound(msg:string){
+  throw new NotFoundException(msg)
+}
 
 // for non async validation  
 function validate(){

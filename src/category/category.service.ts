@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoggerService } from 'src/logger/logger.service';
 import { Repository } from 'typeorm';
-import { isStrAndDefined, isUUID } from '../lib';
+import { isStrAndDefined, isUUID, notFound } from '../lib';
 import { Category } from './entity/category.entity';
 
 @Injectable()
@@ -29,12 +29,17 @@ export class CategoryService {
 
   async findOne(id?: string, name?: string): Promise<Category | null> {
     try {
-      return await this.categoryRepository.findOne({
+      const cat = await this.categoryRepository.findOne({
         where: [
           { id: isUUID(id) ? id : null },
-          { name: isStrAndDefined(name) ? name : null, },
+          { name: isStrAndDefined(name) ? name : null },
         ],
       });
+
+      if (!cat) {
+        notFound('cat not found!');
+      }
+      return cat;
     } catch (err) {
       this.loggerService.error('[CategoryService] -', `${err}`);
     }
@@ -50,7 +55,7 @@ export class CategoryService {
 
   async update(catArg: Category): Promise<Category | null> {
     try {
-      const catObj = await this.categoryRepository.findOne(catArg.id);
+      const catObj = await this.findOne(catArg.id);
       if (!catObj) {
         return;
       } else {
@@ -64,7 +69,8 @@ export class CategoryService {
 
   async delete(id: string): Promise<void> {
     try {
-      await this.categoryRepository.delete(id);
+      const catId = await this.findOne(id)
+      await this.categoryRepository.delete(catId);
     } catch (err) {
       this.loggerService.error('[CategoryService] -', `${err}`);
     }

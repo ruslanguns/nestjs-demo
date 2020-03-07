@@ -2,8 +2,11 @@ import {
   IsBoolean,
   IsDecimal,
   IsDefined,
+  IsNotEmpty,
   IsString,
+  IsUUID,
   Length,
+  IsNumber,
 } from 'class-validator';
 import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
@@ -15,38 +18,45 @@ export class Product extends DateBase {
   @Field()
   @Column()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @Field()
   @Column()
   @IsString()
   @Length(2, 255)
+  @IsNotEmpty()
   description: string;
 
   @Field()
   @Column()
   @IsString()
+  @IsNotEmpty()
   image: string;
 
   @Field()
   @Column()
   @IsString()
+  @IsNotEmpty()
   barCode: string;
 
   @Field()
   @Column({ default: 0 })
   @IsDecimal()
+  @IsNotEmpty()
   costPrice: number;
 
   @Field()
   @Column({ default: 0 })
   @IsDecimal()
+  @IsNotEmpty()
   sellPrice: number;
 
   @Field()
   @IsDefined()
   @Column({ default: 5 })
   @IsDecimal()
+  @IsNotEmpty()
   inStock: number;
 
   @Field()
@@ -57,6 +67,7 @@ export class Product extends DateBase {
   @Field()
   @Column()
   @IsString()
+  @IsNotEmpty()
   sellsMeasurement: string;
 
   /*  @Field()
@@ -67,35 +78,36 @@ export class Product extends DateBase {
   category: Category; */
 
   @Field()
-  @Column()
+  @Column({ default: false, nullable: true })
   @IsBoolean()
   visibleOnShelve: string;
 }
 
 @InputType({ description: 'Product input data' })
-export class ProductInput {
+export class ProductInput extends Product {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
-
-  @Field()
-  @IsString()
-  email: string;
-
-  @Field()
-  @IsString()
-  password: string;
 }
 
 @ArgsType()
-export class ProductIdArgs {
-  @Field(type => ID)
+export class ProductArgs {
+  @Field(type => ID, { nullable: true })
+  @PrimaryGeneratedColumn('uuid')
   @IsString()
-  id: string;
+  @IsUUID()
+  id?: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  title?: string;
 }
 
-@ArgsType()
-export class ProductNameArgs {
-  @Field()
+export class ProductFilterArgs {
+  @Field({ nullable: true })
   @IsString()
-  title: string;
+  filterBy?: string;
+
+  @Field({ nullable: true })
+  @IsNumber()
+  skip?: number;
 }
