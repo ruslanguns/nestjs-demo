@@ -21,7 +21,7 @@ export class ProductResolver {
     try {
       return await this.productService.findAll({filterBy, skip});
     } catch (err) {
-      //this.loggerService.error('[ProductService] -', `${err}`);
+      this.loggerService.error('[ProductService] -', `${err}`);
     }
   }
 

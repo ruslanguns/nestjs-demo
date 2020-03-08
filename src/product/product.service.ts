@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { isStrAndDefined, isUUID } from 'src/lib';
+import {  isStrAndDefined, isUUID, badRequest } from 'src/lib';
 import { Repository } from 'typeorm';
 import { Product, ProductFilterArgs } from './entity/product.entity';
 
@@ -8,7 +8,9 @@ import { Product, ProductFilterArgs } from './entity/product.entity';
 export class ProductService {
   constructor(
     @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>, //private readonly categoryService: CategoryService, //private readonly loggerService: LoggerService,
+    private readonly productRepository: Repository<Product>, 
+    //private readonly categoryService: CategoryService, 
+    //private readonly loggerService: LoggerService,
   ) {
     // set scope: context [ProductService]
     //this.loggerService.setContext('ProductService');
@@ -74,12 +76,16 @@ export class ProductService {
     }
   }
 
-  async delete(id?: string) {
+  async delete(id?: string): Promise<void> {
     try {
-      const p = await this.findOne(id);
-      return await this.productRepository.delete({
-        id: isUUID(p.id) ? p.id : null,
+      const res = await this.productRepository.delete({
+        id: isUUID(id) ? id : null,
       });
+
+      if (res.affected === 0) {
+        badRequest('Product was not deleted!');
+      }
+
     } catch (err) {
       //this.loggerService.error('[ProductService] -', `${err}`);
     }

@@ -41,9 +41,9 @@ async function bootstrap() {
     console.log(`Server started on http://localhost:${PORT}`);
   });
 
-  if (module.hot) {
+  /*  if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());
-  }
+  } */
 }
 bootstrap();
