@@ -10,7 +10,6 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:dev:t": "tsc-watch --onSuccess \"node dist/main.js\" --onFailure \"echo There was a problem with the build!\" -p tscfonig.json",
     "start:wp:dev": "nest build --watch --webpack --webpackPath webpack-hmr.config.js",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

@@ -7,7 +7,6 @@ import 'reflect-metadata';
 import { AppModule } from './app.module';
 import { LoggerService } from './logger/logger.service';
 
-
 declare const module: any;
 
 async function bootstrap() {
@@ -33,7 +32,5 @@ async function bootstrap() {
   await app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
   });
-
- 
 }
 bootstrap();
