@@ -1,13 +1,18 @@
-import { Args, Query, Resolver, Mutation } from '@nestjs/graphql';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { LoggerService } from 'src/logger/logger.service';
-import { Product, ProductArgs, ProductInput, ProductFilterArgs } from '../entity/product.entity';
+import {
+  Product,
+  ProductArgs,
+  ProductFilterArgs,
+  ProductInput,
+} from '../entity/product.entity';
 import { ProductService } from '../product.service';
-import { ValidationPipe, UsePipes } from '@nestjs/common';
 
 @Resolver(of => Product)
 export class ProductResolver {
   constructor(
-    private readonly productService: ProductService, 
+    private readonly productService: ProductService,
     private readonly loggerService: LoggerService,
   ) {
     // set scope: context [ProductResolver]
@@ -19,7 +24,7 @@ export class ProductResolver {
     @Args() { filterBy, skip }: ProductFilterArgs,
   ): Promise<Product[] | Product | null> {
     try {
-      return await this.productService.findAll({filterBy, skip});
+      return await this.productService.findAll({ filterBy, skip });
     } catch (err) {
       this.loggerService.error('[ProductService] -', `${err}`);
     }
@@ -30,7 +35,7 @@ export class ProductResolver {
     try {
       return await this.productService.findOne(id, title);
     } catch (err) {
-      //this.loggerService.error('[ProductService] -', `${err}`);
+      this.loggerService.error('[ProductService] -', `${err}`);
     }
   }
 
@@ -42,7 +47,7 @@ export class ProductResolver {
     try {
       return await this.productService.create(productInput);
     } catch (err) {
-      //this.loggerService.error('[ProductService] -', `${err}`);
+      this.loggerService.error('[ProductService] -', `${err}`);
     }
   }
 
@@ -54,7 +59,7 @@ export class ProductResolver {
     try {
       return await this.productService.update(productInput);
     } catch (err) {
-      //this.loggerService.error('[ProductService] -', `${err}`);
+      this.loggerService.error('[ProductService] -', `${err}`);
     }
   }
 
@@ -64,7 +69,7 @@ export class ProductResolver {
     try {
       await this.productService.delete(id);
     } catch (err) {
-      //this.loggerService.error('[ProductService] -', `${err}`);
+      this.loggerService.error('[ProductService] -', `${err}`);
     }
   }
 }

@@ -5,35 +5,21 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
-import { BlogModule } from './blog/blog.module';
 import { CategoryModule } from './category/category.module';
 import configuration from './config/configuration';
-import { DatabaseModule } from './database/database.module';
-import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { LoggerModule } from './logger/logger.module';
-//import { ProductModule } from './product/product.module';
-import { RecipeModule } from './recipe/recipe.module';
+import { ProductModule } from './product/product.module';
 import { SharedModule } from './shared/shared.module';
 import { TypeormConfigService } from './shared/typeorm-config/typeorm-config.service';
-import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    AuthModule,
-    RecipeModule,
-    DatabaseModule,
-    UserModule,
-    BlogModule,
     CategoryModule,
-    // ProductModule,
+    ProductModule,
     CacheModule.register({
       ttl: 500, //500 sec
       max: 50, // maximum num of items in cache
@@ -49,25 +35,41 @@ import { UserModule } from './user/user.module';
       playground: true,
       context: ({ req }) => ({ req }),
     }),
-    TypeOrmModule.forRootAsync({
-      useClass: TypeormConfigService,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'toor',
+      database: 'db_test_101',
+      logging: ['error'],
+      logger: 'file',
+      maxQueryExecutionTime: 1000,
+      entityPrefix: 'inv_',
+      cache: {
+        duration: 30000,
+      },
+      synchronize: true,
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      autoLoadEntities: true,
+      subscribers: ['src/database/subscriber/**/*.entity.ts'],
+      migrations: ['src/migration/**/*.ts'],
+      cli: {
+        entitiesDir: 'src/entity',
+        migrationsDir: 'src/migration',
+        subscribersDir: 'src/subscriber',
+      },
     }),
+    /*  TypeOrmModule.forRootAsync({
+      useClass: TypeormConfigService,
+    }), */
     LoggerModule,
     SharedModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    AuthService,
-    TypeormConfigService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
-  ],
+  providers: [AppService, TypeormConfigService],
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {
-  constructor(private readonly cnx: Connection) {}
   onModuleInit() {
     console.log(`[AppModule] has been initialized...`);
   }
