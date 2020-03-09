@@ -12,7 +12,7 @@ declare const module: any;
 async function bootstrap() {
   dotenv.config();
   const app = await NestFactory.create(AppModule, {
-    logger: false,
+    logger: new LoggerService,
   });
 
   app.use(helmet());

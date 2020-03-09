@@ -14,7 +14,7 @@ import configuration from './config/configuration';
 import { LoggerModule } from './logger/logger.module';
 import { ProductModule } from './product/product.module';
 import { SharedModule } from './shared/shared.module';
-import { TypeormConfigService } from './shared/typeorm-config/typeorm-config.service';
+// import { TypeormConfigService } from './shared/typeorm-config/typeorm-config.service';
 
 @Module({
   imports: [
@@ -64,10 +64,10 @@ import { TypeormConfigService } from './shared/typeorm-config/typeorm-config.ser
       useClass: TypeormConfigService,
     }), */
     LoggerModule,
-    SharedModule,
+    // SharedModule,
   ],
   controllers: [AppController],
-  providers: [AppService, TypeormConfigService],
+  providers: [AppService],
 })
 export class AppModule implements OnModuleInit, OnApplicationShutdown {
   onModuleInit() {

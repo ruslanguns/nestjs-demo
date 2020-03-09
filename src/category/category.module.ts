@@ -9,6 +9,6 @@ import { LoggerModule } from 'src/logger/logger.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Category]), LoggerModule],
   providers: [CategoryService, CategoryResolver],
-  exports: [TypeOrmModule],
+  exports: [],
 })
-export class CategoryModule {}
+export class CategoryModule { }
